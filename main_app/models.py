@@ -31,6 +31,7 @@ class Finch(models.Model):
     description = models.TextField(max_length=250)
     age = models.IntegerField()
     trinkets = models.ManyToManyField(Trinket)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.name} ({self.id})'
