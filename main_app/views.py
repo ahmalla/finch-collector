@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .models import Finch, Trinket
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 from .forms import FeedingForm
 
 
