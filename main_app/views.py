@@ -17,7 +17,7 @@ def about(request):
 
 
 def finches_index(request):
-    finches = Finch.objects.all()
+    finches = Finch.objects.filter(user=request.user)
     return render(request, "finches/index.html", {"finches": finches})
 
 
