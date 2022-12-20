@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import FeedingForm
 
 
@@ -21,7 +22,7 @@ def finches_index(request):
     finches = Finch.objects.filter(user=request.user)
     return render(request, "finches/index.html", {"finches": finches})
 
-
+@login_required
 def finches_detail(request, finch_id):
     finch = Finch.objects.get(id=finch_id)
     id_list = finch.trinkets.all().values_list("id")
@@ -43,7 +44,7 @@ class FinchList(ListView):
     template_name = "finches/index.html"
 
 
-class FinchCreate(CreateView):
+class FinchCreate(LoginRequiredMixin, CreateView):
     model = Finch
     fields = ["name", "species", "description", "age"]
     success_url = "/finches/"
@@ -53,16 +54,17 @@ class FinchCreate(CreateView):
         return super().form_valid(form)
 
 
-class FinchUpdate(UpdateView):
+class FinchUpdate(LoginRequiredMixin, UpdateView):
     model = Finch
     fields = ["species", "description", "age"]
 
 
-class FinchDelete(DeleteView):
+class FinchDelete(LoginRequiredMixin, DeleteView):
     model = Finch
     success_url = "/finches/"
 
 
+@login_required
 def add_feeding(request, finch_id):
     form = FeedingForm(request.POST)
     if form.is_valid():
@@ -71,35 +73,37 @@ def add_feeding(request, finch_id):
         new_feeding.save()
     return redirect("detail", finch_id=finch_id)
 
+
+@login_required
 def remove_trinket (request, finch_id, trinket_id):
     Finch.objects.get(id=finch_id).trinkets.remove(trinket_id)
     return redirect('detail', finch_id=finch_id)
 
 
-class TrinketList(ListView):
+class TrinketList(LoginRequiredMixin, ListView):
     model = Trinket
 
 
-class TrinketDetail(DetailView):
+class TrinketDetail(LoginRequiredMixin, DetailView):
     model = Trinket
 
 
-class TrinketCreate(CreateView):
+class TrinketCreate(LoginRequiredMixin, CreateView):
     model = Trinket
     fields = "__all__"
     success_url = "/trinkets/"
 
 
-class TrinketUpdate(UpdateView):
+class TrinketUpdate(LoginRequiredMixin, UpdateView):
     model = Trinket
     fields = ["name", "color"]
 
 
-class TrinketDelete(DeleteView):
+class TrinketDelete(LoginRequiredMixin, DeleteView):
     model = Trinket
     success_url = "/trinkets/"
 
-
+@login_required
 def assoc_trinket(request, finch_id, trinket_id):
     Finch.objects.get(id=finch_id).trinkets.add(trinket_id)
     return redirect('detail', finch_id=finch_id)
