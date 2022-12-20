@@ -16,14 +16,22 @@ def about(request):
 
 def finches_index(request):
     finches = Finch.objects.all()
-    return render(request, 'finches/index.html', {'finches': finches})
+    return render(request, "finches/index.html", {"finches": finches})
 
 
 def finches_detail(request, finch_id):
     finch = Finch.objects.get(id=finch_id)
+    id_list = finch.trinkets.all().values_list("id")
+    trinkets_finch_doesnt_have = Trinket.objects.exclude(id__in=id_list)
     feeding_form = FeedingForm()
     return render(
-        request, "finches/detail.html", {"finch": finch, "feeding_form": feeding_form}
+        request,
+        "finches/detail.html",
+        {
+            "finch": finch,
+            "feeding_form": feeding_form,
+            "trinkets": trinkets_finch_doesnt_have,
+        },
     )
 
 
@@ -34,7 +42,7 @@ class FinchList(ListView):
 
 class FinchCreate(CreateView):
     model = Finch
-    fields = "__all__"
+    fields = ["name", "species", "description", "age"]
     success_url = "/finches/"
 
 
@@ -47,30 +55,44 @@ class FinchDelete(DeleteView):
     model = Finch
     success_url = "/finches/"
 
+
 def add_feeding(request, finch_id):
     form = FeedingForm(request.POST)
     if form.is_valid():
         new_feeding = form.save(commit=False)
         new_feeding.finch_id = finch_id
         new_feeding.save()
+    return redirect("detail", finch_id=finch_id)
+
+def remove_trinket (request, finch_id, trinket_id):
+    Finch.objects.get(id=finch_id).trinkets.remove(trinket_id)
     return redirect('detail', finch_id=finch_id)
 
 
 class TrinketList(ListView):
     model = Trinket
 
+
 class TrinketDetail(DetailView):
     model = Trinket
 
+
 class TrinketCreate(CreateView):
     model = Trinket
-    fields = '__all__'
-    success_url = '/trinkets/'
+    fields = "__all__"
+    success_url = "/trinkets/"
+
 
 class TrinketUpdate(UpdateView):
     model = Trinket
-    fields = ['name', 'color']
+    fields = ["name", "color"]
+
 
 class TrinketDelete(DeleteView):
     model = Trinket
-    success_url = '/trinkets/'
+    success_url = "/trinkets/"
+
+
+def assoc_trinket(request, finch_id, trinket_id):
+    Finch.objects.get(id=finch_id).trinkets.add(trinket_id)
+    return redirect('detail', finch_id=finch_id)

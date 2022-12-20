@@ -15,7 +15,7 @@ class Trinket(models.Model):
     color = models.CharField(max_length=20)
 
     def __str__(self):
-        return self.name
+        return f'{self.color} ({self.name})'
 
     def get_absolute_url(self):
         return reverse('trinkets_detail', kwargs={'pk': self.id})
@@ -32,7 +32,7 @@ class Finch(models.Model):
     trinkets = models.ManyToManyField(Trinket)
 
     def __str__(self):
-        return f'{self.name}' ({self.id})
+        return f'{self.name} ({self.id})'
 
     def get_absolute_url(self):
         return reverse("detail", kwargs={"finch_id": self.id})
