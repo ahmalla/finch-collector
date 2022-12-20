@@ -17,6 +17,8 @@ urlpatterns = [
     path('trinkets/create/', views.TrinketCreate.as_view(), name='trinkets_create'),
     path('trinkets/<int:pk>/update/', views.TrinketUpdate.as_view(), name='trinkets_update'),
     path('trinkets/<int:pk>/delete/', views.TrinketDelete.as_view(), name='trinkets_delete'),
+    path('accounts/signup/', views.signup, name='signup'),
+
 ]
 
 
