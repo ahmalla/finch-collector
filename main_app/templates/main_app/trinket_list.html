@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Trinket List</h1>
+
+{% for trinket in trinket_list %}
+  <a href="{% url 'trinkets_detail' trinket.id %}">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">{{ trinket.name }}</span>
+            <p>Color: {{ trinket.color }}</p>
+        </div>
+    </div>
+  </a>
+{% endfor %}
+
+{% endblock %}

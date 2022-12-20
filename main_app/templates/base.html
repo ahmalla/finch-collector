@@ -12,6 +12,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
   </head>
   <body >
@@ -25,6 +26,8 @@
           </ul>
           <ul class="right">
             <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'trinkets_create' %}">Add a Trinket</a></li>
+            <li><a href="{% url 'trinkets_index' %}">View All Trinkets</a></li>
             <li><a href="{% url 'finches_create' %}">Add a Finch</a></li>
             <li><a href="{% url 'index' %}">View all Finch</a></li>
           </ul>
