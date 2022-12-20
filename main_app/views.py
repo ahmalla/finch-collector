@@ -4,6 +4,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 from .forms import FeedingForm
 
 
@@ -15,7 +16,7 @@ def home(request):
 def about(request):
     return render(request, "about.html")
 
-
+@login_required
 def finches_index(request):
     finches = Finch.objects.filter(user=request.user)
     return render(request, "finches/index.html", {"finches": finches})
