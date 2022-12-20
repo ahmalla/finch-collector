@@ -102,3 +102,18 @@ class TrinketDelete(DeleteView):
 def assoc_trinket(request, finch_id, trinket_id):
     Finch.objects.get(id=finch_id).trinkets.add(trinket_id)
     return redirect('detail', finch_id=finch_id)
+
+
+def signup(request):
+    error_message = ''
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('index')
+        else:
+            error_message = 'Sign Up not valid - Please Try Again'
+        form = UserCreationForm()
+        context = {'form': form, 'error_message': error_message}
+        return render(request, 'registration/signup.html', context)
