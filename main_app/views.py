@@ -17,10 +17,13 @@ def home(request):
 def about(request):
     return render(request, "about.html")
 
+
 @login_required
 def finches_index(request):
     finches = Finch.objects.filter(user=request.user)
-    return render(request, "finches/index.html", {"finches": finches})
+    return render(request, 'finches/index.html', { 'finches': finches })
+
+
 
 @login_required
 def finches_detail(request, finch_id):
@@ -39,7 +42,7 @@ def finches_detail(request, finch_id):
     )
 
 
-class FinchList(ListView):
+class FinchList(LoginRequiredMixin, ListView):
     model = Finch
     template_name = "finches/index.html"
 
@@ -75,9 +78,9 @@ def add_feeding(request, finch_id):
 
 
 @login_required
-def remove_trinket (request, finch_id, trinket_id):
+def remove_trinket(request, finch_id, trinket_id):
     Finch.objects.get(id=finch_id).trinkets.remove(trinket_id)
-    return redirect('detail', finch_id=finch_id)
+    return redirect("detail", finch_id=finch_id)
 
 
 class TrinketList(LoginRequiredMixin, ListView):
@@ -103,22 +106,25 @@ class TrinketDelete(LoginRequiredMixin, DeleteView):
     model = Trinket
     success_url = "/trinkets/"
 
+
 @login_required
 def assoc_trinket(request, finch_id, trinket_id):
     Finch.objects.get(id=finch_id).trinkets.add(trinket_id)
-    return redirect('detail', finch_id=finch_id)
+    return redirect("detail", finch_id=finch_id)
+
+
 
 
 def signup(request):
-    error_message = ''
-    if request.method == 'POST':
+    error_message = ""
+    if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('index')
+            return redirect("index")
         else:
-            error_message = 'Sign Up not valid - Please Try Again'
-        form = UserCreationForm()
-        context = {'form': form, 'error_message': error_message}
-        return render(request, 'registration/signup.html', context)
+            error_message = "Sign Up does not meet Expectations - Please Try Again"
+    form = UserCreationForm()
+    context = {"form": form, "error_message": error_message}
+    return render(request, "registration/signup.html", context)
