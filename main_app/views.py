@@ -21,7 +21,7 @@ def about(request):
 @login_required
 def finches_index(request):
     finches = Finch.objects.filter(user=request.user)
-    return render(request, 'finches/index.html', { 'finches': finches })
+    return render(request, FinchList, { 'finches': finches })
 
 
 
