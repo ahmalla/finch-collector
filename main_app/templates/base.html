@@ -11,6 +11,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
@@ -25,7 +26,7 @@
             </li>
           </ul>
           <ul class="right">
-            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'about' %}"><i class="material-icons left">account_circle</i>About</a></li>
             {% if user.is_authenticated %}
               <li><a href="{% url 'trinkets_create' %}">Add a Trinket</a></li>
               <li><a href="{% url 'trinkets_index' %}">View All Trinkets</a></li>
