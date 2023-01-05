@@ -1,0 +1,1 @@
+web: finchcollector.wsgi
